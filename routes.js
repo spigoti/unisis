@@ -2,16 +2,18 @@ const Router  = require("express");
 const ListArticlesController = require("./controllers/ListArticles");
 const {CreateUserController} = require("./controllers/users/CreateUserController");
 const {UpdateUserController} = require("./controllers/users/UpdateUserController");
-const {DeleteUserController} = require("./controllers/users/DeleteUserController");
-const {ReadUserController} = require("./controllers/users/ReadUserController");
+// const {DeleteUserController} = require("./controllers/users/DeleteUserController");
+// const {ReadUserController} = require("./controllers/users/ReadUserController");
 const {CreateProtocolController} = require("./controllers/protocols/CreateProtocolController");
 const ListUsersController = require("./controllers/ListUsers");
 const {AuthController} = require("./controllers/AuthController");
 const {confirmAuthenticated} = require("./middleware/confirmAuthenticated")
 const {CreateArticleController} = require("./controllers/articles/CreateArticleController");
-
-
 const router = Router()
+
+router.get('/', (req, res) => {
+   res.sendFile("./app/dist/index.html");
+});
 
 router.post('/auth', new AuthController().handle);
 router.post('/user',  new CreateUserController().handle);
