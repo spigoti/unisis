@@ -11,10 +11,6 @@ const {confirmAuthenticated} = require("./middleware/confirmAuthenticated")
 const {CreateArticleController} = require("./controllers/articles/CreateArticleController");
 const router = Router()
 
-router.get('/', (req, res) => {
-   res.sendFile("./app/dist/index.html");
-});
-
 router.post('/auth', new AuthController().handle);
 router.post('/user',  new CreateUserController().handle);
 router.put('/user',  new UpdateUserController().handle);

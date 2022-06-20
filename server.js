@@ -9,6 +9,6 @@ app.use(express.json());
 app.use(router);
 app.use(express.static(__dirname + '/app/dist/'));
 
-app.listen(8080, () => {
+app.listen(4000, () => {
   console.log('Server running');
 })
