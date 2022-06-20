@@ -7,8 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-ttc-ii/node_modules
-ttc-ii-api/node_modules
+node_modules
 dist
 dist-ssr
 *.local
