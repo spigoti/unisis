@@ -1,7 +1,7 @@
 const Router  = require("express");
 
 //Articles
-const ListArticlesController = require("./controllers/ListArticles");
+const ListArticlesController = require("./controllers/articles/ListArticlesController");
 const CreateArticleController = require("./controllers/articles/CreateArticleController");
 const DeleteArticleController = require("./controllers/articles/DeleteArticleController");
 
