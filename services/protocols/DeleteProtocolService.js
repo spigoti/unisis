@@ -7,9 +7,9 @@ class DeleteProtocolService {
             const connection = await connectToDB();
             const [result] = await connection.execute(`DELETE FROM protocol WHERE id = ${id}`);
             return result;
-          } catch (error) {
-              throw new Error(error);
-          }
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 }
 

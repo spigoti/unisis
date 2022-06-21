@@ -1,19 +1,16 @@
-const mysql = require('mysql2');
+const {connectToDB} = require('../../database');
 
 class UpdateUserService {
-    async execute(email, password) {
-        const connection = mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: '',
-            port: 3306,
-            database: 'unisis'
-        });
+    async execute(id, email) {
 
-        let userUpdate = '';
-
-        return {userUpdate};
+        try {
+            const connection = await connectToDB();
+            const [result] = await connection.execute(`UPDATE user SET email = ${email} WHERE id = ${id}`);
+            return result.insertId;
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 }
 
-module.exports = {UpdateUserService};
+module.exports = UpdateUserService;

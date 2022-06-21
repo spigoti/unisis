@@ -1,20 +1,18 @@
-const {CreateProtocolService} = require("../../services/protocols/CreateProtocolService");
+const ReadProtocolService = require("../../services/protocols/ReadProtocolService");
 
-class CreateProtocolController {
+class ReadProtocolController {
     async handle (req, res) {
-        const {name, ieeeQuery, acmQuery} = req.body;
-        const service = new CreateProtocolService();
+        const { id } = req.params;
+        const service = new ReadProtocolService();
 
         try {
-            const result = service.execute(name, ieeeQuery, acmQuery);
-            console.log(result)
-            return res.json("Deu certo");
-
+            const result = await service.execute(id);
+            return res.json(result);
         } catch (err) {
             return res.json({error: err.message});
         }
     }
 }
 
-module.exports = {CreateProtocolController};
+module.exports = ReadProtocolController;
 

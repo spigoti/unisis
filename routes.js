@@ -6,7 +6,7 @@ const CreateArticleController = require("./controllers/articles/CreateArticleCon
 const DeleteArticleController = require("./controllers/articles/DeleteArticleController");
 
 //User
-const ListUsersController = require("./controllers/ListUsers");
+const ListUsersController = require("./controllers/users/ListUserController");
 const CreateUserController = require("./controllers/users/CreateUserController");
 const UpdateUserController = require("./controllers/users/UpdateUserController");
 const DeleteUserController = require("./controllers/users/DeleteUserController");
