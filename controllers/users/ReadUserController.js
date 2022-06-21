@@ -1,14 +1,13 @@
-const {CreateUserService} = require("../../services/users/CreateUserService");
+const ReadUserService = require("../../services/users/ReadUserService");
 
 class ReadUserController {
     async handle (req, res) {
-        const {email, password, } = req.body;
-        const service = new CreateUserService();
+        const { id } = req.params;
+        const service = new ReadUserService();
 
         try {
-            const result = service.execute(email, password);
+            const result = await service.execute(id);
             return res.json(result);
-
         } catch (err) {
             return res.json({error: err.message});
         }

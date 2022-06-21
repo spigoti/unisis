@@ -23,6 +23,7 @@ const router = Router();
 
 router.post('/auth', new AuthController().handle);
 router.post('/user',  new CreateUserController().handle);
+router.get('/user/:id',  new ReadUserController().handle);
 router.put('/user',  new UpdateUserController().handle);
 router.delete('/user/:id',  new DeleteUserController().handle);
 router.post('/article',  new CreateArticleController().handle);
