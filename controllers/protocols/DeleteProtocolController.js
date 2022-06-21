@@ -15,5 +15,5 @@ class DeleteProtocolController {
     }
 }
 
-module.exports = {CreateProtocolController};
+module.exports = DeleteProtocolController;
 
