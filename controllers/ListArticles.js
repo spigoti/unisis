@@ -37,7 +37,13 @@ async function extractData(page) {
                     // const email = personElem.querySelector(".email").innerText;
                     // const phone = personElem.querySelector(".phone").innerText;
 
-                    articles.push({title, url, year, abstract, authors});
+                    articles.push({
+                        title,
+                        url,
+                        year,
+                        abstract,
+                        authors
+                    });
                 } catch (e) {
                     console.log(e)
                 }
@@ -63,9 +69,11 @@ function extractDataAcm() {
     //let title = document.querySelector(".issue-item__title");
     //let abstract = document.querySelector(".abstract-text p");
     //let authors =  document.querySelector("ul.loa || [aria-label=authors]");
-   // let ano =  document.querySelector(".bookPubDate");
+    // let ano =  document.querySelector(".bookPubDate");
 
 
 }
 
-module.exports = ListArticlesController;
+module.exports = {
+    ListArticlesController
+};

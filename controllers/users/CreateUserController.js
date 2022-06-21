@@ -6,11 +6,11 @@ class CreateUserController {
         const service = new CreateUserService();
 
         try {
-            const result = service.execute(email, password);
-            return res.json(result);
+            const result = await service.execute(email, password);
+            return res.json({id: result});
 
         } catch (err) {
-            return res.json({error: err.message});
+            return res.send({error: err.message});
         }
     }
 }

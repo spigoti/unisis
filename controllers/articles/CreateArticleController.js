@@ -1,20 +1,25 @@
-const {CreateArticleService} = require("../../services/articles/CreateArticleService");
+const {
+  CreateArticleService
+} = require("../../services/articles/CreateArticleService");
 
 class CreateArticleController {
-    async handle (req, res) {
-        const {title, abstract, authors, year, citedBy, base, referenceUrl, protocol, selected} = req.body;
-        const service = new CreateArticleService();
-console.log(req.body)
-        try {
-            const result = service.execute(title, abstract, authors, year, citedBy, base, referenceUrl, protocol, selected);
-            console.log(result)
-            return res.json("Deu certo");
+  async handle(req, res) {
+    const { title, abstract, authors, year, citedBy, base, referenceUrl, protocol, selected } = req.body;
+    const service = new CreateArticleService();
 
-        } catch (err) {
-            return res.json({error: err.message});
-        }
+    try {
+      const result = service.execute(title, abstract, authors, year, citedBy, base, referenceUrl, protocol, selected);
+      console.log(result)
+      return res.json("Deu certo");
+
+    } catch (err) {
+      return res.json({
+        error: err.message
+      });
     }
+  }
 }
 
-module.exports = {CreateArticleController};
-
+module.exports = {
+  CreateArticleController
+};

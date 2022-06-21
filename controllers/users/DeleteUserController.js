@@ -1,14 +1,13 @@
-const {CreateProtocolService} = require("../../services/protocols/CreateProtocolService");
+const {DeleteUserService} = require("../../services/users/DeleteUserService");
 
-class CreateProtocolController {
+class DeleteUserController {
     async handle (req, res) {
-        const {name, ieeeQuery, acmQuery} = req.body;
-        const service = new CreateProtocolService();
+        const {id} = req.body;
+        const service = new DeleteUserService();
 
         try {
-            const result = service.execute(name, ieeeQuery, acmQuery);
-            console.log(result)
-            return res.json("Deu certo");
+            const result = service.execute(id);
+            return res.json(result);
 
         } catch (err) {
             return res.json({error: err.message});
@@ -16,5 +15,5 @@ class CreateProtocolController {
     }
 }
 
-module.exports = {CreateProtocolController};
+module.exports = {DeleteUserController};
 
