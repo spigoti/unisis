@@ -1,20 +1,19 @@
+const DeleteArticleService = require("../../services/articles/DeleteArticleService");
+
 class DeleteArticleController {
-	async handle(req, res) {
-		const {
-			id
-		} = req.body;
+    async handle (req, res) {
+        const {id} = req.params;
+        const service = new DeleteArticleService();
 
-		const service = new DeleteArticleService(id);
+        try {
+            await service.execute(id);
+            return res.json({message: 'Artigo removido com sucesso!'});
 
-		try {
-			const result = service.execute();
-			return res.json(result);
-		} catch (err) {
-			return res.json({
-				error: err.message
-			});
-		}
-	}
+        } catch (err) {
+            return res.json({error: err.message});
+        }
+    }
 }
 
 module.exports = DeleteArticleController;
+
