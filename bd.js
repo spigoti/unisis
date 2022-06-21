@@ -1,7 +1,6 @@
 const mysql = require('mysql2');
 
 const connection = mysql.createConnection('mysql://root@localhost/unisis');
-console.log(connection);
 
 // CREATE TABLE protocol(
 //     id INT NOT NULL AUTO_INCREMENT,
@@ -11,8 +10,16 @@ console.log(connection);
 //     ieeeQuery VARCHAR(255) NOT NULL,
 //     acmQuery VARCHAR(255) NOT NULL,
 //     primary key (id)
-// )
+// );
 
+// CREATE TABLE user (
+//  	id INT NOT NULL AUTO_INCREMENT,
+//   	createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+//     createdBy INT NOT NULL,
+//     email varchar(40) UNIQUE NOT NULL,
+//   	password char(40) NOT NULL,
+//   	primary key (id)
+// );
 
 // CREATE TABLE userProtocol (
 //     id INT NOT NULL AUTO_INCREMENT,
@@ -22,11 +29,11 @@ console.log(connection);
 //     protocolId INT NOT NULL,
 //     primary key (id),
 //     foreign key (createdBy)
-// references user(id),
+// 		references user(id),
 //     foreign key (userId)
-// references user(id),
+// 		references user(id),
 //     foreign key (protocolId)
-// references protocol(id)
+// 		references protocol(id)
 // );
 
 // CREATE TABLE article (
@@ -44,15 +51,14 @@ console.log(connection);
 //         primary key (id),
 //         foreign key (protocolId)
 //             references protocol(id)
-//     )
-
+//     );
 
 const query = ``;
 
 connection.query(
     query,
-    function(err, results, fields) {
-        if(err) {
+    function (err, results, fields) {
+        if (err) {
             console.log(err)
             return;
         }
@@ -60,4 +66,3 @@ connection.query(
         console.log('Deu certo!');
     }
 );
-
