@@ -1,11 +1,15 @@
-const {connection} = require('../../database');
+const {connectToDB} = require('../../database');
 
 class DeleteUserService {
     async execute(id) {
-        const [rows] = await connection.execute(`DELETE FROM users WHERE id = ${id}`);
-
-        return rows;
+        try {
+            const connection = await connectToDB();
+            const [result] = await connection.execute(`DELETE FROM user WHERE id = ${id}`);
+            return result;
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 }
 
-module.exports = {DeleteUserService};
+module.exports = DeleteUserService;
