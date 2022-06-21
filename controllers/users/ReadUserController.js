@@ -1,6 +1,6 @@
 const {CreateUserService} = require("../../services/users/CreateUserService");
 
-class CreateUserController {
+class ReadUserController {
     async handle (req, res) {
         const {email, password, } = req.body;
         const service = new CreateUserService();
@@ -15,4 +15,4 @@ class CreateUserController {
     }
 }
 
-module.exports = {CreateUserController};
+module.exports = ReadUserController;

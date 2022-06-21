@@ -17,4 +17,4 @@ class DeleteArticleController {
 	}
 }
 
-module.exports = {DeleteArticleController}
+module.exports = DeleteArticleController;

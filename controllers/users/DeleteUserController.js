@@ -15,5 +15,5 @@ class DeleteUserController {
     }
 }
 
-module.exports = {DeleteUserController};
+module.exports = DeleteUserController;
 

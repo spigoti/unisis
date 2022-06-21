@@ -16,5 +16,5 @@ class UpdateUserController {
     }
 }
 
-module.exports = {UpdateUserController};
+module.exports = UpdateUserController;
 

@@ -20,6 +20,4 @@ class CreateArticleController {
   }
 }
 
-module.exports = {
-  CreateArticleController
-};
+module.exports = CreateArticleController;

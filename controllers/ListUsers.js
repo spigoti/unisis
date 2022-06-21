@@ -23,6 +23,4 @@ class ListUsersController {
   }
 }
 
-module.exports = {
-  ListUsersController
-};
+module.exports = ListUsersController;

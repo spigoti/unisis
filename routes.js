@@ -2,21 +2,21 @@ const Router  = require("express");
 
 //Articles
 const {ListArticlesController} = require("./controllers/ListArticles");
-const {CreateArticleController} = require("./controllers/articles/CreateArticleController");
-const {DeleteArticleController} = require("./controllers/articles/DeleteArticleController");
+const CreateArticleController = require("./controllers/articles/CreateArticleController");
+const DeleteArticleController = require("./controllers/articles/DeleteArticleController");
 
 //User
-const {ListUsersController} = require("./controllers/ListUsers");
-const {CreateUserController} = require("./controllers/users/CreateUserController");
-const {UpdateUserController} = require("./controllers/users/UpdateUserController");
-const {DeleteUserController} = require("./controllers/users/DeleteUserController");
-const {ReadUserController} = require("./controllers/users/ReadUserController");
+const ListUsersController = require("./controllers/ListUsers");
+const CreateUserController = require("./controllers/users/CreateUserController");
+const UpdateUserController = require("./controllers/users/UpdateUserController");
+const DeleteUserController = require("./controllers/users/DeleteUserController");
+const ReadUserController = require("./controllers/users/ReadUserController");
 
 //Protocol
-const {CreateProtocolController} = require("./controllers/protocols/CreateProtocolController");
+const CreateProtocolController = require("./controllers/protocols/CreateProtocolController");
 
 //Others
-const {AuthController} = require("./controllers/AuthController");
+const AuthController = require("./controllers/AuthController");
 const {confirmAuthenticated} = require("./middleware/confirmAuthenticated");
 
 const router = Router();

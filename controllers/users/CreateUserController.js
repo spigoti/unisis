@@ -15,4 +15,4 @@ class CreateUserController {
     }
 }
 
-module.exports = {CreateUserController};
+module.exports = CreateUserController;

@@ -16,5 +16,5 @@ class CreateProtocolController {
     }
 }
 
-module.exports = {CreateProtocolController};
+module.exports = CreateProtocolController;
 
