@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="20">
+    <el-col :xs="24" :sm="18" :md="16" :lg="12" :xl="8">
       <el-card class="box-card">
         <template #header>
           <div class="card-header" style="">
@@ -26,7 +26,8 @@
                   class="input-with-select"
               >
                 <template #append>
-                  <el-select v-model="searchForm.expression[index]" placeholder="Select" @change="onExpressionChange(this)" style="width: 115px">
+                  <el-select v-model="searchForm.expression[index]" placeholder="Select"
+                             @change="onExpressionChange(this)" style="width: 115px">
                     <el-option label="AND" value="AND"/>
                     <el-option label="OR" value="OR"/>
                     <el-option label="NOT" value="NOT"/>
@@ -37,17 +38,23 @@
             </el-form-item>
             <el-form-item label="Base de dados" prop="region">
               <el-select v-model="searchForm.database" placeholder="Base de dados">
-                <el-option label="Scopus" value="scopus"/>
-                <el-option label="Science direct" value="scdirect"/>
+                <el-option label="ACM e IEEE" value="all"/>
+                <el-option label="ACM" value="acm"/>
                 <el-option label="IEEE" value="ieee"/>
               </el-select>
             </el-form-item>
-            <el-form-item label="Publicado entre:" prop="desc" style="width: 33%">
-              <el-slider v-model="searchForm.yearRange" range :min="searchForm.yearMin" :max="searchForm.yearMax"/>
+            <el-form-item label="Publicado entre:" prop="desc">
+              <div class="w-100">
+                <el-row>
+                  <el-col :xs="24" :lg="12">
+                    <el-slider class="w-100" v-model="searchForm.yearRange" range :min="searchForm.yearMin"
+                               :max="searchForm.yearMax"/>
+                  </el-col>
+                </el-row>
+              </div>
             </el-form-item>
             <el-form-item>
               <el-button @click="cancelProtocol">Cancelar</el-button>
-              <el-button @click="resetForm">Limpar</el-button>
               <el-button type="primary" @click="submitForm">Adicionar Protocolo</el-button>
             </el-form-item>
           </el-form>
@@ -98,13 +105,15 @@ export default {
         resource: '',
         desc: '',
       },
+      acmUrl: '',
+      ieeeUrl: 'https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&queryText=()',
       articles: [],
     }
   },
   methods: {//%20AND%20 //%20AND%20
     submitForm() {
       console.log(this.searchForm.expression)
-      //https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&queryText=(%22All%20Metadata%22:games)%20AND%20(%22All%20Metadata%22:security)%20AND%20(%22All%20Metadata%22:data)
+      //%22All%20Metadata%22:games)%20AND%20(%22All%20Metadata%22:security)%20AND%20(%22All%20Metadata%22:data)
       // let queryToSearch = `https://ieeexplore.ieee.org/search/searchresult.jsp?queryText=${this.searchForm.query.replace(' ', '%20')}&ranges=${this.searchForm.yearRange[0]}_${this.searchForm.yearRange[1]}_Year&rowsPerPage=100&pageNumber=1`;
       // // queryToSearch = 'https://dl.acm.org/action/doSearch?AllField=games';
       axios.post('http://localhost:4000/search', {query: this.searchForm})
@@ -142,7 +151,12 @@ export default {
 </script>
 
 <style>
+
 .el-card__header {
   background-color: black;
+}
+
+.w-100 {
+  width: 100%;
 }
 </style>
