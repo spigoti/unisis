@@ -3,14 +3,17 @@ const puppeteer = require('puppeteer');
 (async () => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto('https://dl.acm.org/action/doSearch?AllField=music');
-    // await page.waitForTimeout(6000)
-    await page.waitForSelector('.items-results');
+    await page.goto('https://dl.acm.org/action/doSearch?AllField=games+AND+SNAKE&expand=dl');
+    await page.waitForTimeout(200)
+    // await page.waitForSelector('.items-results');
     await page.screenshot({ path: 'example.png' });
     const text = await page.evaluate(() => {
         const el = document.querySelector('.items-results');
+
         return el.textContent;
     })
+
+    console.log(555)
     console.log(text);
     // await extractData(page);
     await browser.close();
