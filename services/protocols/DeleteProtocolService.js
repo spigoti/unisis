@@ -1,19 +1,16 @@
-const mysql = require('mysql2');
+const {connectToDB} = require('../../database');
 
-class CreateProtocolService {
-    async execute(name, ieeeQuery, acmQuery) {
-        const connection = mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: '',
-            port: 3306,
-            database: 'unisis'
-        });
+class DeleteProtocolService {
+    async execute(id) {
 
-        let protocolCreate = connection.query(`INSERT INTO protocol (name, ieeeQuery, acmQuery) VALUES ("${name}", "${ieeeQuery}", "${acmQuery}")`);
-
-        return {protocolCreate};
+        try {
+            const connection = await connectToDB();
+            const [result] = await connection.execute(`DELETE FROM protocol WHERE id = ${id}`);
+            return result;
+          } catch (error) {
+              throw new Error(error);
+          }
     }
 }
 
-module.exports = {CreateProtocolService};
+module.exports = DeleteProtocolService;

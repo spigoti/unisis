@@ -1,14 +1,13 @@
-const {CreateProtocolService} = require("../../services/protocols/CreateProtocolService");
+const DeleteProtocolService = require("../../services/protocols/DeleteProtocolService");
 
-class CreateProtocolController {
+class DeleteProtocolController {
     async handle (req, res) {
-        const {name, ieeeQuery, acmQuery} = req.body;
-        const service = new CreateProtocolService();
+        const {id} = req.params;
+        const service = new DeleteProtocolService();
 
         try {
-            const result = service.execute(name, ieeeQuery, acmQuery);
-            console.log(result)
-            return res.json("Deu certo");
+            service.execute(id);
+            return res.json({message: 'Protocolo removido com sucesso!'});
 
         } catch (err) {
             return res.json({error: err.message});
