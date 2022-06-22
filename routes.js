@@ -3,6 +3,7 @@ const Router  = require("express");
 //Articles
 const ListArticlesController = require("./controllers/articles/ListArticlesController");
 const DeleteArticleController = require("./controllers/articles/DeleteArticleController");
+const UpdateArticleController = require("./controllers/articles/UpdateArticleController");
 
 //User
 const ListUsersController = require("./controllers/users/ListUserController");
@@ -33,6 +34,7 @@ router.get('/user/:id',  confirmAuthenticated,  new ReadUserController().handle)
 router.put('/user', confirmAuthenticated, new UpdateUserController().handle);
 router.delete('/user/:id', confirmAuthenticated, new DeleteUserController().handle);
 router.delete('/article/:id', confirmAuthenticated, new DeleteArticleController().handle);
+router.put('/article/:id', confirmAuthenticated, new UpdateArticleController().handle);
 router.post('/protocol', confirmAuthenticated, new CreateProtocolController().handle);
 router.post('/protocol/share', confirmAuthenticated, new ShareProtocolController().handle);
 router.get('/protocol/share/:id', confirmAuthenticated, new ReadSharedProtocolController().handle);
