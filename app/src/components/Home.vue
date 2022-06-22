@@ -13,9 +13,38 @@
 
 <script >
 import axios from "axios";
+import {mapState} from "vuex";
+import {ElMessage} from "element-plus";
 
 export default  {
   name: 'Home',
+  data() {
+    return {
+
+      // commit com mensagem e mandar aparecer
+    }
+  },
+  methods: {
+    userIsAuthenticated(){
+      let user = localStorage.getItem('appUser');
+
+      if (!user) {
+        this.$router.push('/');
+        this.$store.commit('SIGN_OUT');
+        return;
+      }
+
+      user = JSON.parse(user);
+      this.$store.commit('AUTH_USER', user.email);
+    },
+  },
+  created() {
+    this.userIsAuthenticated();
+    ElMessage({
+      message: 'Oi canello',
+      type: 'success'
+    });
+  },
 }
 </script>
 
@@ -27,7 +56,7 @@ export default  {
 }
 
 .el-card__header {
-  background-color: #43BDD4;
+  background-color: #000;
 }
 
 .card-header {

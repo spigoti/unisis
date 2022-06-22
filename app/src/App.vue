@@ -11,4 +11,9 @@
 .element-plus-logo {
   width: 50%;
 }
+
+
+.w-100 {
+  width: 100%;
+}
 </style>

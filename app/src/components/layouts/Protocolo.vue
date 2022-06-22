@@ -1,163 +1,176 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :xs="24" :sm="18" :md="16" :lg="12" :xl="8">
-      <el-card class="box-card">
-        <template #header>
-          <div class="card-header" style="">
-            <span>Novo protocolo</span>
+  <div style="padding: 20px">
+    <el-row>
+      <el-col>
+        <el-card shadow="never">
+          <template #header>
+            <div class="card-header">
+              <span>Meus artigos</span>
+            </div>
+          </template>
+          <div class="el-card__body">
+            <el-row :gutter="20">
+              <el-col v-for="article in articles" class="article" :xs="24" :md="12" :lg="8">
+                <el-card class="box-card">
+                  <div class="protocol__body">
+                    <ul style="list-style-type: none; padding: 0; margin: 0">
+                      <li><span>Nome:</span> {{ article.name }}</li>
+                      <li><span>Authors:</span> {{ article.query }}</li>
+                      <li><span>Ano:</span> {{ article.base }}</li>
+                      <li><span>Resumo:</span> {{ article.year }}</li>
+                      <li><span>Citações:</span> {{ article.name }}</li>
+                      <li><span>Url:</span> {{ article.updatedAt }}</li>
+                    </ul>
+                    <el-row style="margin-top: 20px" :gutter="20">
+                      <el-col :xs="24" :sm="12">
+                            <el-button class="w-100" type="danger" plain>Excluir</el-button>
+                      </el-col>
+                      <el-col :xs="24" :sm="12">
+                        <router-link :to="'/protocolo/' + protocol.id">
+                          <el-button class="w-100">Visualizar</el-button>
+                        </router-link>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </el-card>
+              </el-col>
+            </el-row>
           </div>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
 
-        </template>
-        <div>
-          <el-form
-              ref="searchFormRef"
-              :model="searchForm"
-              label-width="120px"
-              class="demo-searchForm"
-              label-position="top"
-          >
-            <el-form-item label="Nome" prop="name">
-              <el-input v-model="searchForm.name"/>
-            </el-form-item>
-            <el-form-item v-for="(item, index) in searchForm.query" prop="query">
-              <el-input
-                  v-model="searchForm.query[index]"
-                  placeholder="Please input"
-                  class="input-with-select"
-              >
-                <template #append>
-                  <el-select v-model="searchForm.expression[index]" placeholder="Select"
-                             @change="onExpressionChange(this)" style="width: 115px">
-                    <el-option label="AND" value="AND"/>
-                    <el-option label="OR" value="OR"/>
-                    <el-option label="NOT" value="NOT"/>
-                  </el-select>
-                </template>
-              </el-input>
-              <!--              <el-input v-model="searchForm.query[index]"/>-->
-            </el-form-item>
-            <el-form-item label="Base de dados" prop="region">
-              <el-select v-model="searchForm.database" placeholder="Base de dados">
-                <el-option label="ACM e IEEE" value="all"/>
-                <el-option label="ACM" value="acm"/>
-                <el-option label="IEEE" value="ieee"/>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="Publicado entre:" prop="desc">
-              <div class="w-100">
-                <el-row>
-                  <el-col :xs="24" :lg="12">
-                    <el-slider class="w-100" v-model="searchForm.yearRange" range :min="searchForm.yearMin"
-                               :max="searchForm.yearMax"/>
-                  </el-col>
-                </el-row>
-              </div>
-            </el-form-item>
-            <el-form-item>
-              <el-button @click="cancelProtocol">Cancelar</el-button>
-              <el-button type="primary" @click="submitForm">Adicionar Protocolo</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-card>
-    </el-col>
-  </el-row>
-
-  <el-row :gutter="20">
-    <el-col v-for="item in articles" :span="12">
-      <div class="grid-content bg-purple"/>
-      <el-card class="box-card">
-        <template #header>
-          <div class="card-header">
-            <span>{{ item.title }}</span>
-          </div>
-        </template>
-        <div class="text item" style="text-align: start">
-          <p>{{ item.authors }}</p>
-          <p>{{ item.year }}</p>
-          <p>{{ item.abstract }}</p>
-          <a :href="item.url">{{ item.url }}</a>
-        </div>
-      </el-card>
-    </el-col>
-  </el-row>
-
+  <el-dialog v-model="protocolUsersDialog" title="Protocolo compartilhado com">
+    <el-table :data="protocolUsers">
+      <el-table-column property="email" label="Email"/>
+      <el-table-column property="createdAt" label="Criado em:"/>
+    </el-table>
+  </el-dialog>
 </template>
 
-
 <script>
-import axios from "axios";
 
 export default {
   name: 'Protocolo',
   data() {
     return {
-      searchForm: {
-        query: ['security', 'game'],
-        expression: [],
-        database: 'ieee',
-        yearMin: 1980,
-        yearMax: new Date().getFullYear(),
-        yearRange: [2000, new Date().getFullYear()],
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: '',
-      },
-      acmUrl: 'https://dl.acm.org/action/doSearch?AllField=games+AND+SNAKE&expand=dl',
-      ieeeUrl: 'https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&queryText=()',
-      articles: [],
-    }
-  }, //TROCAR O %20 POR +
-  methods: {//%20AND%20 //%20AND%20
-    submitForm() {
-      console.log(this.searchForm.expression)
-      //%22All%20Metadata%22:games)%20AND%20(%22All%20Metadata%22:security)%20AND%20(%22All%20Metadata%22:data)
-      // let queryToSearch = `https://ieeexplore.ieee.org/search/searchresult.jsp?queryText=${this.searchForm.query.replace(' ', '%20')}&ranges=${this.searchForm.yearRange[0]}_${this.searchForm.yearRange[1]}_Year&rowsPerPage=100&pageNumber=1`;
-      // // queryToSearch = 'https://dl.acm.org/action/doSearch?AllField=games';
+      articles: [{
 
-      axios.post('http://localhost:4000/search', {query: this.searchForm})
-          .then((response) => {
-            this.articles = response.data;
-          })
-          .catch(error => {
-            console.log(error)
-          })
-    },
-    resetForm(formEl) {
-      if (!formEl) return
-      formEl.resetFields()
-    },
-    cancelProtocol(formEl) {
-      console.log("O Protocolo foi cancelado");
-    },
-    onExpressionChange(el, event) {
-      console.log(el, event);
+      }],
+      articlesDialog: false,
     }
   },
-  watch: {
-    searchForm(expression) {
-      console.log(expression)
-      // if (status == 'a') {
-      //   this.alterarStatusAtivo()
-      // }
-      // if (status == 'i') {
-      //   this.alterarStatusInativo()
-      // }
-    }
-  }
+  methods: {//%20AND%20 //%20AND%20
+    confirmDeleteProtocol(protocolId) {
+      // this.$store.dispatch('deleteProtocol', protocolId).then((response) => {
+      //   this.protocols = this.protocols.filter(function (protocol) {
+      //     return protocol.id !== protocolId;
+      //   });
+      // }, error => console.log(error));
+    },
+    cancelDeleteProtocol() {
+      console.log('Não foi deletado')
+    },
+    listProtocols() {
+      this.$store.dispatch('listProtocols').then((response) => {
+        this.protocols = this.formatProtocols(response);
+      }, error => console.log(error));
+    },
+    formatProtocols(results) {
+      let protocols = [];
 
+      results.forEach((result, index) => {
+        let protocol = {
+          id: result.protocolId,
+          name: null,
+          query: null,
+          base: null,
+          year: null,
+          updatedAt: null,
+        };
+
+        protocol.name = result.name;
+        protocol.updatedAt = new Date(result.updatedAt).toLocaleDateString();
+
+        if ((result.ieeeQuery !== null) && (result.ieeeQuery !== 'undefined')) {
+          protocol.base = 'IEEE';
+
+          let url = result.ieeeQuery;
+          let queryIndexStart = url.indexOf('queryText=');
+          let queryIndexEnd = url.indexOf('&', queryIndexStart);
+          protocol.query = url.slice(queryIndexStart + 10, queryIndexEnd).replaceAll('%20', ' ');
+
+          let yearIndexStart = url.indexOf('ranges=');
+          let yearIndexEnd = url.indexOf('_Year', queryIndexStart);
+          protocol.year = url.slice(yearIndexStart + 7, yearIndexEnd).replaceAll('_', ' e ');
+        }
+
+        if ((result.acmQuery !== null) && (result.acmQuery !== 'undefined')) {
+          protocol.base = protocol.base ? protocol.base + ' e ACM' : 'ACM';
+          let url = result.acmQuery;
+
+          if (protocol.query === null) {
+            let queryIndexStart = url.indexOf('AllField=');
+            let queryIndexEnd = url.indexOf('&', queryIndexStart);
+            protocol.query = url.slice(queryIndexStart + 9, queryIndexEnd).replaceAll('+', ' ');
+          }
+
+          if (protocol.year === null) {
+            let yearIndexAfterStart = url.indexOf('AfterYear=');
+            let yearIndexAfterEnd = url.indexOf('&', yearIndexAfterStart);
+            let yearIndexBeforeStart = url.indexOf('BeforeYear=');
+            let yearIndexBeforeEnd = url.indexOf('&', yearIndexBeforeStart);
+            let yearAfter = url.slice(yearIndexAfterStart + 10, yearIndexAfterEnd);
+            let yearBefore = url.slice(yearIndexBeforeStart + 11, yearIndexBeforeEnd);
+            console.log(yearIndexAfterStart)
+            protocol.year = yearAfter + ' e ' + yearBefore;
+          }
+        }
+
+        protocols.push(protocol);
+      });
+      return protocols;
+    }
+  },
+  created() {
+    this.listProtocols();
+  },
+  beforeCreate() {
+
+  },
+  watch: {}
 }
+
 </script>
 
 <style>
 
-.el-card__header {
-  background-color: black;
+.mb-3 {
+  margin-bottom: 20px;
 }
 
-.w-100 {
-  width: 100%;
+.protocol {
+  margin-bottom: 20px;
+}
+
+.protocol:hover > a {
+  text-decoration: none;
+}
+
+.protocol .box-card {
+  background-color: #f5f5f5;
+}
+
+.protocol__body {
+  text-align: start
+}
+
+.protocol__body span {
+  font-weight: 600;
+}
+
+.protocol__body li:not(:last-child) {
+  margin-bottom: 8px;
 }
 </style>

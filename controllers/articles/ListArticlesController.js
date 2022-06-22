@@ -8,15 +8,21 @@ class ListArticlesController {
 
         puppeteer.launch()
             .then(async function (browser) {
-                const page = await browser.newPage();
-                let articles;
-                await page.goto(req.body.query);
-                if (req.body.base === 'acm') {
-                    await page.waitForSelector('.search-result__xsl-body');
-                    articles = await extractDataAcm(page);
-                } else {
-                    await page.waitForSelector('.List-results-items');
-                    articles = await extractDataIeee(page);
+                const pageAcm = await browser.newPage();
+                const pageIeee = await browser.newPage();
+
+                let articles = [];
+                if (req.body.acmQuery) {
+                    await pageAcm.goto(req.body.acmQuery);
+                    await pageAcm.waitForSelector('.search-result__xsl-body');
+                    articles = articles.concat(await extractDataAcm(page));
+                    console.log(articles)
+                }
+                if (req.body.ieeeQuery){
+                    await pageIeee.goto(req.body.ieeeQuery);
+                    await pageIeee.waitForSelector('.List-results-items');
+                    articles = articles.concat(await extractDataIeee(page));
+                    console.log(articles)
                 }
 
                 const service = new CreateArticleService();

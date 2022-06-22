@@ -18,7 +18,11 @@ const router = createRouter({
           component: () => import('../components/layouts/MeusProtocolos.vue')
         },
         {
-          path: '/protocolo',
+          path: '/novo-protocolo',
+          component: () => import('../components/layouts/NovoProtocolo.vue')
+        },
+        {
+          path: '/protocolo/:id',
           component: () => import('../components/layouts/Protocolo.vue')
         },
         {
@@ -31,8 +35,8 @@ const router = createRouter({
       name: 'Login',
       path: '/',
       component: () => import('../components/layouts/Login.vue'),
-    }
-
+    },
+    { path: "/:catchAll(.*)", redirect: '/meus-protocolos' }
   ],
 })
 

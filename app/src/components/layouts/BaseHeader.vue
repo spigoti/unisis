@@ -4,7 +4,7 @@
       <el-sub-menu index="2" style="display: flex; align-items: center; margin-right: 12px">
         <template #title>
           <div style="display: flex">
-            <span style="font-weight: 600">usuario1@email.br</span>
+            <span style="font-weight: 600">{{appUser}}</span>
           </div>
         </template>
         <el-menu-item index="2-1"> <router-link :to="'/minha-conta'">Minha conta</router-link></el-menu-item>
@@ -15,6 +15,7 @@
 
 <script>
 import router from "../../router";
+import {mapState} from "vuex";
 
 export default {
   name: 'Navbar',
@@ -24,13 +25,15 @@ export default {
   },
   methods: {
     userLogout() {
-      localStorage.removeItem('userToken');
-      router.push('/');
+      this.$store.commit('SIGN_OUT');
+      this.$router.push('/');
     },
   },
+  computed: {
+    ...mapState({appUser: state => state.appUser})
+  },
   mounted() {
-    let user = JSON.parse(localStorage.getItem('appUser'));
-    console.log(user.email)
+    console.log(this.appUser);
   }
 }
 </script>

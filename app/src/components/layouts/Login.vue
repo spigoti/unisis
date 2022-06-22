@@ -138,7 +138,6 @@
 <script>
 
 import axios from "axios";
-import router from "../../router";
 
 export default {
   name: 'Login',
@@ -177,17 +176,12 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          axios.post('http://localhost:4000/auth', this.loginForm)
-              .then((response) => {
-                console.log(response.data);
-                localStorage.setItem('userToken', response.data.token);
-                localStorage.setItem('appUser', JSON.stringify(response.data.user));
-                router.push('/home');
-              })
-              .catch(error => {
-                alert("Usuário não encontrado");
-                console.log(error)
-              })
+          this.$store.dispatch('authUser', this.loginForm).then( (response) => {
+            this.setLoggedUser(response);
+            this.$router.push('/meus-protocolos');
+          }, error => {
+            alert(error)
+          });
         } else {
           console.log('error submit!!');
           return false;
@@ -201,7 +195,8 @@ export default {
               .then((response) => {
                 if (response){
                   this.$store.dispatch('authUser', this.loginForm).then( (response) => {
-                    alert(JSON.stringify(response));
+                    this.setLoggedUser(response);
+                    this.$router.push('/meus-protocolos');
                   }, error => {
                     alert(error)
                   });
@@ -217,6 +212,10 @@ export default {
           return false;
         }
       });
+    },
+    setLoggedUser(payload){
+      localStorage.setItem('userToken', payload.data.token);
+      localStorage.setItem('appUser', JSON.stringify(payload.data.user));
     },
     newAccount() {
       this.activeForm = 'newAccount';
@@ -300,10 +299,6 @@ a.forgot__password {
 .new__account:hover {
   background-color: #383838;
   color: white;
-}
-
-.w-100 {
-  width: 100%;
 }
 
 

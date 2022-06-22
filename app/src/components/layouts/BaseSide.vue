@@ -12,7 +12,7 @@
     </el-menu-item>
     <el-menu-item index="1">
       <el-icon><document-add /></el-icon>
-      <router-link :to="'/protocolo'">Novo protocolo</router-link>
+      <router-link :to="'/novo-protocolo'">Novo protocolo</router-link>
     </el-menu-item>
   </el-menu>
 </template>
