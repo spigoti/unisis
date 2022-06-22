@@ -1,5 +1,6 @@
 const mysql = require('mysql2/promise');
 const {sign} = require('jsonwebtoken');
+const crypto = require("crypto");
 
 class AuthService {
     async execute(email, password) {
@@ -15,7 +16,9 @@ class AuthService {
             }
 
             let userFound = rows[0];
-            if(userFound.password !== password) {
+            let passwordSha1 = crypto.createHash('sha1').update(password).digest('hex');
+
+            if(userFound.password !== passwordSha1) {
                 return {error: "Senha incorreta."};
             }
 

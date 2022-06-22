@@ -105,17 +105,18 @@ export default {
         resource: '',
         desc: '',
       },
-      acmUrl: '',
+      acmUrl: 'https://dl.acm.org/action/doSearch?AllField=games+AND+SNAKE&expand=dl',
       ieeeUrl: 'https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&queryText=()',
       articles: [],
     }
-  },
+  }, //TROCAR O %20 POR +
   methods: {//%20AND%20 //%20AND%20
     submitForm() {
       console.log(this.searchForm.expression)
       //%22All%20Metadata%22:games)%20AND%20(%22All%20Metadata%22:security)%20AND%20(%22All%20Metadata%22:data)
       // let queryToSearch = `https://ieeexplore.ieee.org/search/searchresult.jsp?queryText=${this.searchForm.query.replace(' ', '%20')}&ranges=${this.searchForm.yearRange[0]}_${this.searchForm.yearRange[1]}_Year&rowsPerPage=100&pageNumber=1`;
       // // queryToSearch = 'https://dl.acm.org/action/doSearch?AllField=games';
+
       axios.post('http://localhost:4000/search', {query: this.searchForm})
           .then((response) => {
             this.articles = response.data;

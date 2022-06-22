@@ -8,6 +8,13 @@ class CreateArticleService {
         return {
             articleCreate
         };
+
+        // var sql = "INSERT INTO Test (name, email, n) VALUES ?";
+        //
+        // conn.query(sql, [values], function(err) {
+        //     if (err) throw err;
+        //     conn.end();
+        // });
     }
 }
 

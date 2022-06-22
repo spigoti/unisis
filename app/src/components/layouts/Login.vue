@@ -33,7 +33,7 @@
             <el-divider/>
             <el-form-item>
               <div style="width: 100%; display: flex; justify-content: center">
-                <el-button class="new__account" @click="">Criar nova conta</el-button>
+                <el-button class="new__account" @click="newAccount">Criar nova conta</el-button>
               </div>
             </el-form-item>
           </el-form>
@@ -98,6 +98,39 @@
           </el-form>
         </el-card>
       </el-col>
+      <el-col class="card__login" v-if="activeForm === 'newAccount'">
+        <el-card>
+          <div class="logo__wrapper is-flex">
+            <img src="/src/assets/logo.png">
+            <span>UNISIS</span>
+          </div>
+          <h4>Cadastro</h4>
+          <el-form
+              label-width="120px"
+              label-position="top"
+              :model="loginForm" :rules="rules" ref="newAccountForm"
+          >
+            <el-form-item label="Email" prop="email">
+              <el-input type="email" v-model="loginForm.email"/>
+            </el-form-item>
+            <el-form-item label="Senha" prop="password">
+              <el-input type="password" v-model="loginForm.password"/>
+            </el-form-item>
+            <el-form-item label="Confirmar senha" prop="confirmPassword">
+              <el-input type="password" v-model="loginForm.confirmPassword"/>
+            </el-form-item>
+            <el-form-item>
+              <div class="w-100">
+                <el-row :gutter="10">
+                  <el-col :xs="24">
+                    <el-button type="primary" @click="newAccountSubmit('newAccountForm')">Criar conta</el-button>
+                  </el-col>
+                </el-row>
+              </div>
+            </el-form-item>
+          </el-form>
+        </el-card>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -110,6 +143,12 @@ import router from "../../router";
 export default {
   name: 'Login',
   data() {
+    let validatePasConfirmation = (rule, value, callback) => {
+      if (value !== this.loginForm.password) {
+        callback(new Error('As senhas devem ser iguais.'));
+      }
+      callback();
+    };
     return {
       rules: {
         email: [
@@ -118,11 +157,16 @@ export default {
         password: [
           {min: 4, required: true, message: 'Insira uma senha com no mínimo 4 dígitos. ', trigger: 'blur'}
         ],
+        confirmPassword: [
+          {validator: validatePasConfirmation, trigger: 'blur'},
+        ],
       },
       activeForm: "login",
       loginForm: {
         email: null,
-        password: null
+        password: null,
+        confirmPassword: null
+
       },
     }
   },
@@ -137,6 +181,7 @@ export default {
               .then((response) => {
                 console.log(response.data);
                 localStorage.setItem('userToken', response.data.token);
+                localStorage.setItem('appUser', JSON.stringify(response.data.user));
                 router.push('/home');
               })
               .catch(error => {
@@ -149,12 +194,38 @@ export default {
         }
       });
     },
+    newAccountSubmit(formName){
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          axios.post('http://localhost:4000/user', this.loginForm)
+              .then((response) => {
+                if (response){
+                  this.$store.dispatch('authUser', this.loginForm).then( (response) => {
+                    alert(JSON.stringify(response));
+                  }, error => {
+                    alert(error)
+                  });
+                }
+                console.log(response.data);
+              })
+              .catch(error => {
+                alert("Erro ao realizar o cadastro");
+                console.log(error)
+              })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    newAccount() {
+      this.activeForm = 'newAccount';
+    },
     forgotPassword() {
       this.activeForm = 'passwordRecovery';
     },
     passwordRecovery() {
       this.activeForm = 'passwordChange';
-      console.log('PRECISA RECUPERAR O PASSWORD AQUI');
     },
     passwordChange() {
       this.activeForm = 'passwordChange';

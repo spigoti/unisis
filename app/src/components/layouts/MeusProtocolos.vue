@@ -72,7 +72,7 @@ export default {
           email: "felipe",
           createdAt: "22/05/2022"
         }
-      ]
+      ],
     }
   },
   methods: {//%20AND%20 //%20AND%20
@@ -82,6 +82,9 @@ export default {
     cancelDeleteProtocol() {
       console.log('Não foi deletado')
     }
+  },
+  beforeCreate() {
+
   },
   watch: {}
 }

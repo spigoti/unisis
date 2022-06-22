@@ -28,6 +28,10 @@ export default {
       router.push('/');
     },
   },
+  mounted() {
+    let user = JSON.parse(localStorage.getItem('appUser'));
+    console.log(user.email)
+  }
 }
 </script>
 
