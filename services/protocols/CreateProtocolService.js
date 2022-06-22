@@ -12,7 +12,6 @@ class CreateProtocolService {
 
             const connection = await connectToDB();
             const query = this.createQuery(entity);
-            console.log(query);
             const [result] = await connection.execute(query);
 
             await connection.execute(`INSERT INTO userProtocol (createdBy, userId, protocolId) VALUES (${userId}, ${userId}, ${result.insertId});`);

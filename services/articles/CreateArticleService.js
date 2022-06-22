@@ -1,23 +1,20 @@
-const { connection } = require('../../database');
+const { connectToDB } = require('../../database');
 
 class CreateArticleService {
-    async execute(title, abstract, authors, year, citedBy, base, referenceUrl, protocol, selected) {
+    async execute(title, abstract, authors, year, citedBy, base, referenceUrl, protocol) {
 
-        let articleCreate = await connection.execute(`INSERT INTO article (title, abstract, authors, year, citedBy, base, referenceUrl, protocol, selected) VALUES ("${title}", "${abstract}", "${authors}", "${year}", "${citedBy}", "${base}", "${referenceUrl}", "${protocol}", "${selected}")`);
+        if(!base) {
+            base = null;
+        }
 
-        return {
-            articleCreate
-        };
-
-        // var sql = "INSERT INTO Test (name, email, n) VALUES ?";
-        //
-        // conn.query(sql, [values], function(err) {
-        //     if (err) throw err;
-        //     conn.end();
-        // });
+        try {
+            const connection = await connectToDB();
+            const [rows] = await connection.execute(`INSERT INTO article (title, abstract, authors, year, citedBy, base, referenceUrl, protocol) VALUES (${title}, ${abstract}, ${authors}, "${year}", ${citedBy}, ${base}, ${referenceUrl}, ${protocol});`);
+            return rows;
+          } catch (error) {
+            throw new Error(error);
+          }
     }
 }
 
-module.exports = {
-    CreateArticleService
-};
+module.exports = CreateArticleService;

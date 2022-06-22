@@ -1,6 +1,4 @@
-const {
-  CreateArticleService
-} = require("../../services/articles/CreateArticleService");
+const CreateArticleService = require("../../services/articles/CreateArticleService");
 
 class CreateArticleController {
   async handle(req, res) {

@@ -1,8 +1,11 @@
 const puppeteer = require("puppeteer");
+const CreateArticleService = require("../../services/articles/CreateArticleService");
 let totalResults;
 
 class ListArticlesController {
     async handle(req, res) {
+        const {protocol, base} = req.body;
+
         puppeteer.launch()
             .then(async function (browser) {
                 const page = await browser.newPage();
@@ -15,7 +18,13 @@ class ListArticlesController {
                     await page.waitForSelector('.List-results-items');
                     articles = await extractDataIeee(page);
                 }
-                res.send(articles)
+
+                const service = new CreateArticleService();
+                articles.forEach(async (item) => {
+                    await service.execute(item.title, item.abstract, item.authors, item.year, item.citedBy, base, item.referenceUrl, protocol);
+                })
+
+                res.send(articles);
             })
             .catch(error => {
                 console.log(error);
@@ -37,14 +46,14 @@ async function extractDataIeee(page) {
             for (let i = 0; i < articlesElemLen; i++) {
                 try {
                     let title = articlesElem[i].querySelector('h2').innerText;
-                    let url = articlesElem[i].querySelector('a').href;
+                    let referenceUrl = articlesElem[i].querySelector('a').href;
                     let year = +articlesElem[i].querySelector('.publisher-info-container span:first-child').innerText.split(': ')[1];
                     let abstract = articlesElem[i].querySelector('.js-displayer-content > span').innerText;
                     let authors = articlesElem[i].querySelector('.author').innerText;
-                    let citations = articlesElem[i].querySelector('[href*="#citations"]').innerText;
+                    let citedBy = articlesElem[i].querySelector('[href*="#citations"]').innerText;
                     citations = +citations.slice(citations.indexOf('(') + 1, citations.indexOf(')'))
 
-                    articles.push({title, url, year, abstract, authors, citations, base:'ieee'});
+                    articles.push({title, referenceUrl, year, abstract, authors, citedBy, base:'ieee'});
                 } catch (e) {
                     console.log(e)
                 }
@@ -68,14 +77,14 @@ async function extractDataAcm(page) {
             for (let i = 0; i < articlesElemLen; i++) {
                 try {
                     let title = articlesElem[i].querySelector('.hlFld-Title a').innerText;
-                    let url = articlesElem[i].querySelector('.hlFld-Title a').href;
+                    let referenceUrl = articlesElem[i].querySelector('.hlFld-Title a').href;
                     let year = +articlesElem[i].querySelector('.bookPubDate').innerText.split(' ')[1];
                     let abstract = articlesElem[i].querySelector('.issue-item__abstract > p').innerText;
                     let authors = articlesElem[i].querySelector('ul.loa').innerText;
-                    let citations = +articlesElem[i].querySelector('.citation span').innerText;
+                    let citedBy = +articlesElem[i].querySelector('.citation span').innerText;
                     // citations = +citations.slice(citations.indexOf('(') + 1, citations.indexOf(')'))
 
-                    articles.push({title, url, year, abstract, authors, citations, base:'acm'});
+                    articles.push({title, referenceUrl, year, abstract, authors, citedBy, base:'acm'});
                 } catch (e) {
                     console.log(e)
                 }

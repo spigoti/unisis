@@ -7,7 +7,7 @@ class CreateProtocolController {
         const service = new CreateProtocolService();
 
         try {
-            const result = service.execute(name, ieeeQuery, acmQuery, userId);
+            const result = await service.execute(name, ieeeQuery, acmQuery, userId);
             return res.json({id: result});
 
         } catch (err) {
