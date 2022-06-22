@@ -3,9 +3,10 @@ const ListProtocolService = require("../../services/protocols/ListProtocolServic
 class ListProtocolController {
     async handle (req, res) {
 			const service = new ListProtocolService();
+			const {userId} = req;
 
 			try {
-					const result = await service.execute();
+					const result = await service.execute(userId);
 					return res.json(result);
 			} catch (err) {
 					return res.json({error: err.message});
