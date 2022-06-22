@@ -27,18 +27,17 @@ const router = Router();
 
 router.post('/auth', new AuthController().handle);
 router.post('/user',  new CreateUserController().handle);
-router.get('/user/:id',  new ReadUserController().handle);
-router.put('/user',  new UpdateUserController().handle);
-router.delete('/user/:id',  new DeleteUserController().handle);
-router.post('/article',  new CreateArticleController().handle);
-router.delete('/article/:id',  new DeleteArticleController().handle);
-router.post('/protocol', new CreateProtocolController().handle);
-router.get('/protocol', new ListProtocolController().handle);
-router.get('/protocol/:id', new ReadProtocolController().handle);
-router.put('/protocol/:id', new UpdateProtocolController().handle);
-router.delete('/protocol/:id', new DeleteProtocolController().handle);
+router.get('/user/:id',  confirmAuthenticated,  new ReadUserController().handle);
+router.put('/user', confirmAuthenticated, new UpdateUserController().handle);
+router.delete('/user/:id', confirmAuthenticated, new DeleteUserController().handle);
+router.post('/article', confirmAuthenticated, new CreateArticleController().handle);
+router.delete('/article/:id', confirmAuthenticated, new DeleteArticleController().handle);
+router.post('/protocol', confirmAuthenticated, new CreateProtocolController().handle);
+router.get('/protocol', confirmAuthenticated, new ListProtocolController().handle);
+router.get('/protocol/:id', confirmAuthenticated, new ReadProtocolController().handle);
+router.put('/protocol/:id', confirmAuthenticated, new UpdateProtocolController().handle);
+router.delete('/protocol/:id', confirmAuthenticated, new DeleteProtocolController().handle);
 router.post('/search', confirmAuthenticated, new ListArticlesController().handle);
-router.get('/users', new ListUsersController().handle);
-
+router.get('/users', confirmAuthenticated, new ListUsersController().handle);
 
 module.exports = {router};

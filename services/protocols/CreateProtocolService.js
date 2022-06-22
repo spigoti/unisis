@@ -1,18 +1,18 @@
-const mysql = require('mysql2');
+const {connectToDB} = require('../../database');
 
 class CreateProtocolService {
-    async execute(name, ieeeQuery, acmQuery) {
-        const connection = mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: '',
-            port: 3306,
-            database: 'unisis'
-        });
+    async execute(name, ieeeQuery, acmQuery, userId) {
+        
+        try {
+            const connection = await connectToDB();
+            const [result] = await connection.execute(`INSERT INTO protocol (name, ieeeQuery, acmQuery) VALUES ("${name}", "${ieeeQuery}", "${acmQuery}");`);
 
-        let protocolCreate = connection.query(`INSERT INTO protocol (name, ieeeQuery, acmQuery) VALUES ("${name}", "${ieeeQuery}", "${acmQuery}")`);
+            await connection.execute(`INSERT INTO userProtocol (createdBy, userId, protocolId) VALUES (${userId}, ${userId}, ${result.insertId});`);
 
-        return {protocolCreate};
+            return result.insertId;
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 }
 
