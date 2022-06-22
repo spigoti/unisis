@@ -25,7 +25,7 @@
                     <a class="forgot__password" @click="forgotPassword">Esqueceu a senha?</a>
                   </el-col>
                   <el-col :xs="24" :md="12">
-                    <el-button type="primary" @click="submitForm('loginForm')">Entrar</el-button>
+                    <el-button type="primary" :loading="signInLoading" @click="submitForm('loginForm')">Entrar</el-button>
                   </el-col>
                 </el-row>
               </div>
@@ -123,7 +123,7 @@
               <div class="w-100">
                 <el-row :gutter="10">
                   <el-col :xs="24">
-                    <el-button type="primary" @click="newAccountSubmit('newAccountForm')">Criar conta</el-button>
+                    <el-button type="primary" :loading="createAccountLoading" @click="newAccountSubmit('newAccountForm')">Criar conta</el-button>
                   </el-col>
                 </el-row>
               </div>
@@ -138,6 +138,7 @@
 <script>
 
 import axios from "axios";
+import {ElMessage} from "element-plus";
 
 export default {
   name: 'Login',
@@ -160,6 +161,8 @@ export default {
           {validator: validatePasConfirmation, trigger: 'blur'},
         ],
       },
+      signInLoading: false,
+      createAccountLoading: false,
       activeForm: "login",
       loginForm: {
         email: null,
@@ -176,39 +179,48 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.signInLoading = true;
           this.$store.dispatch('authUser', this.loginForm).then( (response) => {
             this.setLoggedUser(response);
             this.$router.push('/meus-protocolos');
-          }, error => {
-            alert(error)
+            this.signInLoading = false;
+          }, (error) => {
+            ElMessage({
+              message: error ,
+              type: 'error'
+            });
+            this.signInLoading = false;
           });
         } else {
-          console.log('error submit!!');
           return false;
         }
       });
     },
     newAccountSubmit(formName){
+      console.log(this)
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.createAccountLoading = true;
           axios.post('http://localhost:4000/user', this.loginForm)
               .then((response) => {
                 if (response){
                   this.$store.dispatch('authUser', this.loginForm).then( (response) => {
                     this.setLoggedUser(response);
                     this.$router.push('/meus-protocolos');
-                  }, error => {
-                    alert(error)
+                  }, (error) => {
+                    this.createAccountLoading = false;
+                    ElMessage({
+                      message: error ,
+                      type: 'error'
+                    });
                   });
                 }
-                console.log(response.data);
               })
               .catch(error => {
-                alert("Erro ao realizar o cadastro");
-                console.log(error)
+                alert(error);
+                this.createAccountLoading = false;
               })
         } else {
-          console.log('error submit!!');
           return false;
         }
       });

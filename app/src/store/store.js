@@ -23,10 +23,11 @@ const store = createStore({
             return new Promise((resolve, reject) => {
                 axios.post('http://localhost:4000/auth', payload)
                     .then((response) => {
+                        axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
                         commit('AUTH_USER', response.data.user.email);
                         resolve(response)
                     }, error => {
-                        reject(error);
+                        reject(error.response.data.message);
                     })
             })
         },
@@ -48,6 +49,16 @@ const store = createStore({
                     })
                     .catch(error => {
                         reject(error)
+                    })
+            })
+        },
+        readProtocol({state, commit}, protocolId) {
+            return new Promise((resolve, reject) => {
+                axios.get('http://localhost:4000/protocol/' + protocolId)
+                    .then((response) => {
+                        resolve(response.data);
+                    }, error => {
+                        reject(error);
                     })
             })
         },

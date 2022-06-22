@@ -12,16 +12,12 @@
 </template>
 
 <script >
-import axios from "axios";
-import {mapState} from "vuex";
-import {ElMessage} from "element-plus";
 
 export default  {
   name: 'Home',
   data() {
     return {
 
-      // commit com mensagem e mandar aparecer
     }
   },
   methods: {
@@ -36,14 +32,11 @@ export default  {
 
       user = JSON.parse(user);
       this.$store.commit('AUTH_USER', user.email);
+
     },
   },
   created() {
     this.userIsAuthenticated();
-    ElMessage({
-      message: 'Oi canello',
-      type: 'success'
-    });
   },
 }
 </script>

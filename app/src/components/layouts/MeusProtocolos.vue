@@ -9,6 +9,12 @@
             </div>
           </template>
           <div class="el-card__body">
+            <div v-if="protocols.length === 0" class="is-flex" style="flex-direction: column; color: #1f1f1f">
+              <h3>Você não possui protocolos.</h3>
+              <router-link :to="'/novo-protocolo'">
+                <el-button type="primary">Criar protocolo</el-button>
+              </router-link>
+            </div>
             <el-row :gutter="20">
               <el-col v-for="protocol in protocols" class="protocol" :xs="24" :md="12" :lg="8">
                 <el-card class="box-card">

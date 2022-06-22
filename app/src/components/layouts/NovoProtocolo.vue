@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="20">
+  <el-row :gutter="20" :loading="true" >
     <el-col :xs="24" :sm="18" :md="16" :lg="12" :xl="8">
       <el-card class="box-card">
         <template #header>
@@ -56,7 +56,7 @@
             </el-form-item>
             <el-form-item>
               <el-button @click="cancelProtocol">Cancelar</el-button>
-              <el-button type="primary" @click="submitForm('protocolForm')">Adicionar Protocolo</el-button>
+              <el-button v-loading.fullscreen.lock="fullscreenLoading" type="primary" @click="submitForm('protocolForm')">Adicionar Protocolo</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -89,6 +89,7 @@
 <script>
 import axios from "axios";
 import {toRaw} from "vue";
+import {ElMessage} from "element-plus";
 
 export default {
   name: 'NovoProtocolo',
@@ -108,12 +109,14 @@ export default {
         yearMax: new Date().getFullYear(),
         yearRange: [2000, new Date().getFullYear()],
       },
+      fullscreenLoading: false,
     }
-  }, //TROCAR O %20 POR +
-  methods: {//%20AND%20 //%20AND%20
+  },
+  methods: {
     submitForm(protocolFormRef) {
       this.$refs[protocolFormRef].validate((valid) => {
         if (valid) {
+          this.fullscreenLoading = true;
           let yearRange = toRaw(this.protocolForm.yearRange);
           let database = toRaw(this.protocolForm.database);
           let payload = {
@@ -123,11 +126,11 @@ export default {
           }
 
           if (database === 'all' || database === 'acm') {
-            payload.acmQuery = `https://dl.acm.org/action/doSearch?AllField=${this.generateAcmQuery()}&AfterYear=${yearRange[0]}&BeforeYear=${yearRange[1]}`;
+            payload.acmQuery = `https://dl.acm.org/action/doSearch?AllField=${this.generateAcmQuery()}&AfterYear=${yearRange[0]}&BeforeYear=${yearRange[1]}&startPage=0&pageSize=50`;
           }
 
           if (database === 'all' || database === 'ieee') {
-            payload.ieeeQuery = `https://ieeexplore.ieee.org/search/searchresult.jsp?queryText=${this.generateIeeeQuery()}&ranges=${yearRange[0]}_${yearRange[1]}`;
+            payload.ieeeQuery = `https://ieeexplore.ieee.org/search/searchresult.jsp?queryText=${this.generateIeeeQuery()}&ranges=${yearRange[0]}_${yearRange[1]}_Year&rowsPerPage=50&pageNumber=1`;
           }
 
           this.$store.dispatch('createProtocol', payload).then((response) => {
@@ -138,36 +141,32 @@ export default {
             }
 
             this.$store.dispatch('search', searchParameters).then((response) => {
-              console.log(response);
+              this.fullscreenLoading = false;
+              ElMessage({
+                message: 'Protocolo criado com sucesso!',
+                type: 'success'
+              });
+              this.$router.push('/protocolo/' + searchParameters.protocol);
+
             }, error => {
-              console.log(error)
+              ElMessage({
+                message: error ,
+                type: 'error'
+              });
+              this.fullscreenLoading = false;
             })
           }, error => {
-            console.log(error)
+            ElMessage({
+              message: error ,
+              type: 'error'
+            });
           })
 
         } else {
           console.log('error submit!!');
           return false;
         }
-      })
-      ;
-      // let ieeeUrl = `https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true&queryText=GAMES%20AND%20SECURITY&ranges=2008_2019_Year`;
-      // let payload = this.generateProtocolQuery();
-      // this.$store.dispatch('createProtocol', payload).then((response) => {
-      //       console.log(this.protocolForm.expression)
-      //%22All%20Metadata%22:games)%20AND%20(%22All%20Metadata%22:security)%20AND%20(%22All%20Metadata%22:data)
-      // let queryToSearch = `https://ieeexplore.ieee.org/search/searchresult.jsp?queryText=${this.protocolForm.query.replace(' ', '%20')}&ranges=${this.protocolForm.yearRange[0]}_${this.protocolForm.yearRange[1]}_Year&rowsPerPage=100&pageNumber=1`;
-      // // queryToSearch = 'https://dl.acm.org/action/doSearch?AllField=games';
-
-      // axios.post('http://localhost:4000/search', {query: this.protocolForm})
-      //     .then((response) => {
-      //       this.articles = response.data;
-      //     })
-      //     .catch(error => {
-      //       console.log(error)
-      //     })
-      // })
+      });
     },
     resetForm(formEl) {
       if (!formEl) return
@@ -201,7 +200,6 @@ export default {
           }
         });
       }
-
       return query;
     }
     ,
