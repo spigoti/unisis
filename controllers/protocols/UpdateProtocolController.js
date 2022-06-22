@@ -1,6 +1,6 @@
 const UpdateProtocolService = require("../../services/protocols/UpdateProtocolService");
 
-class CreateProtocolController {
+class UpdateProtocolController {
     async handle (req, res) {
         const {name, ieeeQuery, acmQuery} = req.body;
         const service = new UpdateProtocolService();
@@ -15,5 +15,5 @@ class CreateProtocolController {
     }
 }
 
-module.exports = {CreateProtocolController};
+module.exports = UpdateProtocolController;
 

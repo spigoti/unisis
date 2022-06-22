@@ -14,6 +14,10 @@ const ReadUserController = require("./controllers/users/ReadUserController");
 
 //Protocol
 const CreateProtocolController = require("./controllers/protocols/CreateProtocolController");
+const ReadProtocolController = require("./controllers/protocols/ReadProtocolController");
+const ListProtocolController = require("./controllers/protocols/ListProtocolsController");
+const DeleteProtocolController = require("./controllers/protocols/DeleteProtocolController");
+const UpdateProtocolController = require("./controllers/protocols/UpdateProtocolController");
 
 //Others
 const AuthController = require("./controllers/AuthController");
@@ -29,6 +33,10 @@ router.delete('/user/:id',  new DeleteUserController().handle);
 router.post('/article',  new CreateArticleController().handle);
 router.delete('/article/:id',  new DeleteArticleController().handle);
 router.post('/protocol', new CreateProtocolController().handle);
+router.get('/protocol', new ListProtocolController().handle);
+router.get('/protocol/:id', new ReadProtocolController().handle);
+router.put('/protocol/:id', new UpdateProtocolController().handle);
+router.delete('/protocol/:id', new DeleteProtocolController().handle);
 router.post('/search', confirmAuthenticated, new ListArticlesController().handle);
 router.get('/users', new ListUsersController().handle);
 
