@@ -4,8 +4,16 @@ class CreateProtocolService {
     async execute(name, ieeeQuery, acmQuery, userId) {
         
         try {
+            let entity = {
+                name,
+                ieeeQuery,
+                acmQuery
+            };
+
             const connection = await connectToDB();
-            const [result] = await connection.execute(`INSERT INTO protocol (name, ieeeQuery, acmQuery) VALUES ("${name}", "${ieeeQuery}", "${acmQuery}");`);
+            const query = this.createQuery(entity);
+            console.log(query);
+            const [result] = await connection.execute(query);
 
             await connection.execute(`INSERT INTO userProtocol (createdBy, userId, protocolId) VALUES (${userId}, ${userId}, ${result.insertId});`);
 
@@ -13,6 +21,22 @@ class CreateProtocolService {
         } catch (error) {
             throw new Error(error);
         }
+    }
+
+    createQuery(entity) {
+        let availableFields = [];
+        let availableValues = [];
+
+        for(let index in entity) {
+            if(!!entity[index]) {
+                availableFields.push(index);
+                availableValues.push(`"${entity[index]}"`);
+            }
+        }
+
+        let availableValuesString = availableValues.join(',');
+        let availableFieldsString = availableFields.join(',');
+        return `INSERT INTO protocol (${availableFieldsString}) VALUES (${availableValuesString})`;
     }
 }
 
