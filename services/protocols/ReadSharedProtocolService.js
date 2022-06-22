@@ -5,8 +5,8 @@ class ReadSharedProtocolService {
 
       try {
         const connection = await connectToDB();
-        const [rows] = await connection.execute(`SELECT * FROM protocol WHERE id = ${id};`);
-        return rows[0];
+        const [rows] = await connection.execute(`SELECT * FROM userProtocol pr JOIN user us ON us.id = pr.userId WHERE pr.protocolId = ${id};`);
+        return rows;
       } catch (error) {
         throw new Error(error);
       }
