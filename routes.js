@@ -20,6 +20,7 @@ const DeleteProtocolController = require("./controllers/protocols/DeleteProtocol
 const UpdateProtocolController = require("./controllers/protocols/UpdateProtocolController");
 const ShareProtocolController = require("./controllers/protocols/ShareProtocolController");
 const ReadSharedProtocolController = require("./controllers/protocols/ReadSharedProtocolController");
+const DeleteShareProcotolController = require("./controllers/protocols/DeleteShareProcotolController");
 
 //Others
 const AuthController = require("./controllers/AuthController");
@@ -37,6 +38,7 @@ router.delete('/article/:id', confirmAuthenticated, new DeleteArticleController(
 router.post('/protocol', confirmAuthenticated, new CreateProtocolController().handle);
 router.post('/protocol/share', confirmAuthenticated, new ShareProtocolController().handle);
 router.get('/protocol/share/:id', confirmAuthenticated, new ReadSharedProtocolController().handle);
+router.delete('/protocol/share/:id', confirmAuthenticated, new DeleteShareProcotolController().handle);
 router.get('/protocol', confirmAuthenticated, new ListProtocolController().handle);
 router.get('/protocol/:id', confirmAuthenticated, new ReadProtocolController().handle);
 router.put('/protocol/:id', confirmAuthenticated, new UpdateProtocolController().handle);
