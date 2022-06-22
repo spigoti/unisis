@@ -1,13 +1,13 @@
-const UpdateProtocolService = require("../../services/protocols/UpdateProtocolService");
+const UpdateArticleService = require("../../services/articles/UpdateArticleService");
 
-class UpdateProtocolController {
+class UpdateArticleController {
     async handle (req, res) {
-        const {name, ieeeQuery, acmQuery} = req.body;
+        const {selected} = req.body;
         const {id} = req.params;
-        const service = new UpdateProtocolService();
+        const service = new UpdateArticleService();
 
         try {
-            const result = service.execute(name, ieeeQuery, acmQuery, id);
+            const result = service.execute(id, selected);
             return res.json({id: result});
 
         } catch (err) {
@@ -16,5 +16,5 @@ class UpdateProtocolController {
     }
 }
 
-module.exports = UpdateProtocolController;
+module.exports = UpdateArticleController;
 
