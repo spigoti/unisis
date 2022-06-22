@@ -18,6 +18,7 @@ const ReadProtocolController = require("./controllers/protocols/ReadProtocolCont
 const ListProtocolController = require("./controllers/protocols/ListProtocolsController");
 const DeleteProtocolController = require("./controllers/protocols/DeleteProtocolController");
 const UpdateProtocolController = require("./controllers/protocols/UpdateProtocolController");
+const ShareProtocolController = require("./controllers/protocols/ShareProtocolController");
 
 //Others
 const AuthController = require("./controllers/AuthController");
@@ -33,6 +34,7 @@ router.delete('/user/:id', confirmAuthenticated, new DeleteUserController().hand
 router.post('/article', confirmAuthenticated, new CreateArticleController().handle);
 router.delete('/article/:id', confirmAuthenticated, new DeleteArticleController().handle);
 router.post('/protocol', confirmAuthenticated, new CreateProtocolController().handle);
+router.post('/protocol/share', confirmAuthenticated, new ShareProtocolController().handle);
 router.get('/protocol', confirmAuthenticated, new ListProtocolController().handle);
 router.get('/protocol/:id', confirmAuthenticated, new ReadProtocolController().handle);
 router.put('/protocol/:id', confirmAuthenticated, new UpdateProtocolController().handle);
